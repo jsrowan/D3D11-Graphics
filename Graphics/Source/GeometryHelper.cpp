@@ -1,0 +1,72 @@
+#include "stdafx.h"
+
+#include "GeometryHelper.h"
+
+#include "VertexTypes.h"
+
+namespace
+{
+	using namespace dx;
+
+	constexpr std::array<VertexP3N3, 36> cubeVertices = {
+		VertexP3N3{ DirectX::XMFLOAT3(1.00000, -1.00000, 1.00000), DirectX::XMFLOAT3(0.00000, -1.00000, 0.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(-1.00000, -1.00000, 1.00000), DirectX::XMFLOAT3(0.00000, -1.00000, 0.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(-1.00000, -1.00000, -1.00000), DirectX::XMFLOAT3(0.00000, -1.00000, 0.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(-1.00000, 1.00000, -1.00000), DirectX::XMFLOAT3(0.00000, 1.00000, 0.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(-1.00000, 1.00000, 1.00000), DirectX::XMFLOAT3(0.00000, 1.00000, 0.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(1.00000, 1.00000, 1.00000), DirectX::XMFLOAT3(0.00000, 1.00000, 0.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(1.00000, 1.00000, -1.00000), DirectX::XMFLOAT3(1.00000, 0.00000, 0.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(1.00000, 1.00000, 1.00000), DirectX::XMFLOAT3(1.00000, 0.00000, 0.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(1.00000, -1.00000, 1.00000), DirectX::XMFLOAT3(1.00000, 0.00000, 0.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(1.00000, 1.00000, 1.00000), DirectX::XMFLOAT3(-0.00000, 0.00000, 1.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(-1.00000, 1.00000, 1.00000), DirectX::XMFLOAT3(-0.00000, 0.00000, 1.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(-1.00000, -1.00000, 1.00000), DirectX::XMFLOAT3(-0.00000, 0.00000, 1.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(-1.00000, -1.00000, 1.00000), DirectX::XMFLOAT3(-1.00000, -0.00000, -0.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(-1.00000, 1.00000, 1.00000), DirectX::XMFLOAT3(-1.00000, -0.00000, -0.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(-1.00000, 1.00000, -1.00000), DirectX::XMFLOAT3(-1.00000, -0.00000, -0.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(1.00000, -1.00000, -1.00000), DirectX::XMFLOAT3(0.00000, 0.00000, -1.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(-1.00000, -1.00000, -1.00000), DirectX::XMFLOAT3(0.00000, 0.00000, -1.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(-1.00000, 1.00000, -1.00000), DirectX::XMFLOAT3(0.00000, 0.00000, -1.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(1.00000, -1.00000, -1.00000), DirectX::XMFLOAT3(0.00000, -1.00000, 0.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(1.00000, -1.00000, 1.00000), DirectX::XMFLOAT3(0.00000, -1.00000, 0.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(-1.00000, -1.00000, -1.00000), DirectX::XMFLOAT3(0.00000, -1.00000, 0.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(1.00000, 1.00000, -1.00000), DirectX::XMFLOAT3(0.00000, 1.00000, 0.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(-1.00000, 1.00000, -1.00000), DirectX::XMFLOAT3(0.00000, 1.00000, 0.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(1.00000, 1.00000, 1.00000), DirectX::XMFLOAT3(0.00000, 1.00000, 0.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(1.00000, -1.00000, -1.00000), DirectX::XMFLOAT3(1.00000, 0.00000, 0.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(1.00000, 1.00000, -1.00000), DirectX::XMFLOAT3(1.00000, 0.00000, 0.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(1.00000, -1.00000, 1.00000), DirectX::XMFLOAT3(1.00000, 0.00000, 0.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(1.00000, -1.00000, 1.00000), DirectX::XMFLOAT3(-0.00000, 0.00000, 1.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(1.00000, 1.00000, 1.00000), DirectX::XMFLOAT3(-0.00000, 0.00000, 1.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(-1.00000, -1.00000, 1.00000), DirectX::XMFLOAT3(-0.00000, 0.00000, 1.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(-1.00000, -1.00000, -1.00000), DirectX::XMFLOAT3(-1.00000, -0.00000, -0.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(-1.00000, -1.00000, 1.00000), DirectX::XMFLOAT3(-1.00000, -0.00000, -0.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(-1.00000, 1.00000, -1.00000), DirectX::XMFLOAT3(-1.00000, -0.00000, -0.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(1.00000, 1.00000, -1.00000), DirectX::XMFLOAT3(0.00000, 0.00000, -1.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(1.00000, -1.00000, -1.00000), DirectX::XMFLOAT3(0.00000, 0.00000, -1.00000) },
+		VertexP3N3{ DirectX::XMFLOAT3(-1.00000, 1.00000, -1.00000), DirectX::XMFLOAT3(0.00000, 0.00000, -1.00000) },
+	};
+
+	constexpr std::array<unsigned int, 36> cubeIndices = {
+		1, 0, 2,
+		4, 3, 5,
+		7, 6, 8,
+		10, 9, 11,
+		13, 12, 14,
+		16, 15, 17,
+		19, 18, 20,
+		22, 21, 23,
+		25, 24, 26,
+		28, 27, 29,
+		31, 30, 32,
+		34, 33, 35,
+	};
+}
+
+namespace dx
+{
+	Geometry CreateCube(ID3D11Device* pDevice)
+	{
+		return Geometry{ VertexBuffer(pDevice, cubeVertices), IndexBuffer(pDevice, cubeIndices) };
+	}
+}
